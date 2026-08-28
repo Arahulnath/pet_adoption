@@ -1,0 +1,72 @@
+.staff-page__toolbar {
+  display: flex;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  max-width: 360px;
+}
+
+.staff-page__toolbar .field {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.staff-page__retry {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.staff-page__filters {
+  display: flex;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.staff-page__filters .field {
+  margin-bottom: 0;
+  min-width: 180px;
+}
+
+.request-detail dl {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 var(--sp-4);
+}
+
+.request-detail dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+}
+
+.request-detail dt {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.request-detail dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.staff-page__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  max-width: 520px;
+}
+
+.staff-page__form .field {
+  max-width: 460px;
+}

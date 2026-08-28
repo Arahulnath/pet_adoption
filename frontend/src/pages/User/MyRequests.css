@@ -1,0 +1,28 @@
+.my-requests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  max-width: 640px;
+}
+
+.my-requests__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.my-requests__item h3 {
+  font-size: var(--fs-base);
+  margin: 0 0 2px;
+}
+
+.my-requests__item p {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}

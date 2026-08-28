@@ -20,13 +20,36 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Pet> addPet(@Valid @RequestBody Pet pet) {
+    public ResponseEntity<Pet> addPet(@RequestBody Pet pet) {
         return new ResponseEntity<>(petService.addPet(pet), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Pet>> getAllPets() {
-        return ResponseEntity.ok(petService.getAllPets());
+    public ResponseEntity<List<Pet>> getAllPets(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) String status) {
+        List<Pet> pets = petService.getAllPets();
+        if (status != null && !status.isBlank()) {
+            String upperStatus = status.toUpperCase();
+            pets = pets.stream()
+                    .filter(p -> p.getAdoptionStatus() != null && upperStatus.equalsIgnoreCase(p.getAdoptionStatus()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+        if (species != null && !species.isBlank()) {
+            pets = pets.stream()
+                    .filter(p -> p.getSpecies() != null && species.equalsIgnoreCase(p.getSpecies()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+        if (search != null && !search.isBlank()) {
+            String lower = search.toLowerCase();
+            pets = pets.stream()
+                    .filter(p -> (p.getName() != null && p.getName().toLowerCase().contains(lower))
+                            || (p.getBreed() != null && p.getBreed().toLowerCase().contains(lower))
+                            || (p.getSpecies() != null && p.getSpecies().toLowerCase().contains(lower)))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+        return ResponseEntity.ok(pets);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +58,7 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @Valid @RequestBody Pet pet) {
+    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody Pet pet) {
         return ResponseEntity.ok(petService.updatePet(id, pet));
     }
 
@@ -48,5 +71,10 @@ public class PetController {
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Pet>> getPetsByStatus(@PathVariable String status) {
         return ResponseEntity.ok(petService.getPetsByStatus(status));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Pet>> search(@RequestParam String keyword) {
+        return ResponseEntity.ok(petService.searchPets(keyword));
     }
 }

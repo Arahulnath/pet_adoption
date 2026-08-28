@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 @RestController
 @RequestMapping("/api/adoption-requests")
 public class AdoptionRequestController {
@@ -25,6 +27,11 @@ public class AdoptionRequestController {
             @PathVariable Long petId,
             @Valid @RequestBody AdoptionRequest request) {
         return new ResponseEntity<>(adoptionRequestService.createRequest(petId, request), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/mine")
+    public ResponseEntity<List<AdoptionRequest>> getMyRequests(@AuthenticationPrincipal String email) {
+        return ResponseEntity.ok(adoptionRequestService.getMyRequests(email));
     }
 
     @GetMapping

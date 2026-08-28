@@ -1,0 +1,23 @@
+.confirm-dialog {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: flex-start;
+}
+
+.confirm-dialog__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-dialog p {
+  margin: 0;
+  color: var(--color-text-muted);
+  padding-top: 8px;
+}

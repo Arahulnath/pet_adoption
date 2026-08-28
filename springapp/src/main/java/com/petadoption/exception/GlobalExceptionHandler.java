@@ -33,6 +33,16 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), null);
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message, Object errors) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now().toString());
