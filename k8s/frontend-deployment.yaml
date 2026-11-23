@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/arahulnath/petadoption-frontend:latest
+          image: ghcr.io/arahulnath/pet_adoption/petadoption-frontend:latest
           ports:
             - containerPort: 80
           resources:
