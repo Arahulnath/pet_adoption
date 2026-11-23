@@ -3,6 +3,8 @@ package com.petadoption.service;
 import com.petadoption.exception.ResourceNotFoundException;
 import com.petadoption.model.Pet;
 import com.petadoption.repository.PetRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class PetService {
         this.petRepository = petRepository;
     }
 
+    @CacheEvict(value = "pets", allEntries = true)
     public Pet addPet(Pet pet) {
         if (pet.getName() == null || pet.getName().isBlank())
             throw new IllegalArgumentException("Pet name is required");
@@ -25,10 +28,12 @@ public class PetService {
         return petRepository.save(pet);
     }
 
+    @Cacheable(value = "pets", key = "'all'")
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     }
 
+    // View count increments bypass cache intentionally
     public Pet getPetById(Long id) {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + id));
@@ -36,6 +41,7 @@ public class PetService {
         return petRepository.save(pet);
     }
 
+    @CacheEvict(value = "pets", allEntries = true)
     public Pet updatePet(Long id, Pet updatedPet) {
         Pet existing = petRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + id));
@@ -53,6 +59,7 @@ public class PetService {
         return petRepository.save(existing);
     }
 
+    @CacheEvict(value = "pets", allEntries = true)
     public void deletePet(Long id) {
         petRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + id));

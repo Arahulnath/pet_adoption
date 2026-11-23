@@ -1,5 +1,7 @@
 package com.petadoption.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    private static final String CB_NAME = "emailService";
 
     private final JavaMailSender mailSender;
 
@@ -36,17 +39,20 @@ public class EmailService {
                 "Thank you for your generous donation of " + amount + " to our shelter!");
     }
 
-    private void send(String to, String subject, String text) {
-        try {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setFrom(fromAddress);
-            msg.setTo(to);
-            msg.setSubject(subject);
-            msg.setText(text);
-            mailSender.send(msg);
-            log.info("Email sent to {}", to);
-        } catch (Exception e) {
-            log.warn("Email could not be sent to {}: {}", to, e.getMessage());
-        }
+    @CircuitBreaker(name = CB_NAME, fallbackMethod = "sendFallback")
+    @Retry(name = CB_NAME)
+    void send(String to, String subject, String text) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom(fromAddress);
+        msg.setTo(to);
+        msg.setSubject(subject);
+        msg.setText(text);
+        mailSender.send(msg);
+        log.info("Email sent to {}", to);
+    }
+
+    // Fallback: circuit is open or all retries exhausted
+    void sendFallback(String to, String subject, String text, Throwable t) {
+        log.warn("Email circuit open — could not send '{}' to {}: {}", subject, to, t.getMessage());
     }
 }

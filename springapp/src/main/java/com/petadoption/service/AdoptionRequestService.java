@@ -5,6 +5,7 @@ import com.petadoption.model.AdoptionRequest;
 import com.petadoption.model.Pet;
 import com.petadoption.repository.AdoptionRequestRepository;
 import com.petadoption.repository.PetRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -61,6 +62,7 @@ public class AdoptionRequestService {
                 .orElseThrow(() -> new ResourceNotFoundException("Adoption request not found with id: " + id));
     }
 
+    @CacheEvict(value = "pets", allEntries = true)
     public AdoptionRequest updateRequestStatus(Long id, String newStatus) {
         String status = newStatus.toUpperCase();
         if (!VALID_STATUSES.contains(status)) {

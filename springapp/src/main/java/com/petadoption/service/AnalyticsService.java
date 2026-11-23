@@ -3,6 +3,7 @@ package com.petadoption.service;
 import com.petadoption.model.Pet;
 import com.petadoption.repository.AdoptionRequestRepository;
 import com.petadoption.repository.PetRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class AnalyticsService {
         this.adoptionRequestRepository = adoptionRequestRepository;
     }
 
+    @Cacheable(value = "analytics", key = "#months")
     public Map<String, Object> getDashboard(int months) {
         Map<String, Object> data = new HashMap<>();
 

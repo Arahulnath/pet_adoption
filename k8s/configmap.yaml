@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: petadoption-config
+  namespace: default
+data:
+  DB_URL: "jdbc:mysql://mysql-service:3306/pet_adoption_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  DB_USERNAME: "root"
+  JWT_EXPIRATION_MS: "86400000"
+  SERVER_PORT: "8080"
